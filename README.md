@@ -27,20 +27,17 @@ https://blazor.app1.es/videoPlayers
 
 |  参数   | 说明  | 默认值  | 
 |  ----  | ----  | ----  | 
-| PdfStream  | 用于渲染的文件流,为空则用URL参数读取文件 |  | 
-| PdfFile  | PDF文件路径, https://xx.com/sample.pdf | null | 
-| Func<string, Task>? OnInfo | 信息回调 | |
+| SourcesUrl  | 资源地址 | null | 
+| SourcesType  | 资源类型,video/mp4, application/x-mpegURL, video/ogg .. 更多参考 EnumVideoType | application/x-mpegURL | 
+| Width  | 宽度 | 300 | 
+| Height  | 高度 | 200 | 
+| Controls  | 显示控制条 | true | 
+| Autoplay  | 自动播放 | true | 
+| Poster  | 设置封面资源,相对或者绝对路径 |  | 
+| Option  | 播放器选项, 不为空则优先使用播放器选项,否则使用参数构建 | null | 
+| async Task Reload(string? url, string? type) | 切换播放资源 | |
+| async Task SetPoster(string? poster) | 设置封面 | |
 | Func<string, Task>? OnError | 错误回调 |
-| EnableStreamingMode  | 使用流化模式,可跨域读取文件 | false | 
-| UrlBase  | PDF文件基础路径, (使用流化模式才需要设置),  https://xx.com |  | 
-| Height  | 高 | 700 | 
-| Page | 指定页码,如果浏览器支持，将加载PDF并自动滚动到第n页 | 1 |
-| ForceIframe | 强制使用 Iframe | false |
-| ForcePDFJS | 强制使用 PDF.js | false |
-| PDFJS_URL | PDF.js 浏览器页面路径 | 内置 |
-| Search | *查询字符串 | |
-| View | *视图模式 | FitV |
-| Pagemode | *页面模式 | thumbs |
 
 
 ---
@@ -76,7 +73,7 @@ https://blazor.app1.es/videoPlayers
 
 [电池信息/网络信息 WebAPI](https://www.nuget.org/packages/BootstrapBlazor.WebAPI#readme-body-tab)
 
-[PDF阅读器 VideoPlayer](https://www.nuget.org/packages/BootstrapBlazor.VideoPlayer#readme-body-tab)
+[视频播放器 VideoPlayer](https://www.nuget.org/packages/BootstrapBlazor.VideoPlayer#readme-body-tab)
 
 #### AlexChow
 

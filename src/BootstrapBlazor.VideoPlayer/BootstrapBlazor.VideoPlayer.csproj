@@ -10,8 +10,8 @@
         <PackageProjectUrl>https://github.com/densen2014/BootstrapBlazor.VideoPlayer</PackageProjectUrl>
         <RepositoryUrl>https://github.com/densen2014/BootstrapBlazor.VideoPlayer</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <PackageTags>Bootstrap Blazor Pdf Reader PDF阅读器 组件 </PackageTags>
-        <Description>Bootstrap UI Pdf Reader components experience</Description>
+        <PackageTags>Bootstrap Blazor VideoPlayer 视频播放器 组件 </PackageTags>
+        <Description>Bootstrap UI VideoPlayer components experience</Description>
         <AssemblyName>BootstrapBlazor.VideoPlayer</AssemblyName>
         <RootNamespace>BootstrapBlazor.VideoPlayer</RootNamespace>
         <AssemblyOriginatorKeyFile>..\keys\Longbow.Utility.snk</AssemblyOriginatorKeyFile>
