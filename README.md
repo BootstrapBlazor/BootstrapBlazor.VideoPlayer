@@ -18,7 +18,7 @@ https://blazor.app1.es/videoPlayers
 
 3.razor页面
 ```
-<VideoPlayer SourcesType="application/x-mpegURL" SourcesUrl="https://d2zihajmogu5jn.cloudfront.net/bipbop-advanced/bipbop_16x9_variant.m3u8" Debug="true" />
+<VideoPlayer SourcesType="application/x-mpegURL" SourcesUrl="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" />
 
 <VideoPlayer SourcesType="video/mp4" SourcesUrl="//vjs.zencdn.net/v/oceans.mp4" />
 ```
