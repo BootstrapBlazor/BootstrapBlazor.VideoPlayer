@@ -4,9 +4,6 @@
 // e-mail:zhouchuanglin@gmail.com 
 // **********************************
 
-using System.ComponentModel;
-using System.Text.Json.Serialization;
-
 namespace BootstrapBlazor.Components;
 
 /// <summary>
@@ -14,12 +11,15 @@ namespace BootstrapBlazor.Components;
 /// </summary>
 public class VideoSources
 {
-    public VideoSources() { }
-
-    public VideoSources(string? type, string? src)
+    /// <summary>
+    /// 构造函数
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="src"></param>
+    public VideoSources(string type, string src)
     {
-        this.Type = type ?? throw new ArgumentNullException(nameof(type));
-        this.Src = src ?? throw new ArgumentNullException(nameof(src));
+        Type = type;
+        Src = src;
     }
 
     /// <summary>
@@ -30,12 +30,10 @@ public class VideoSources
     /// <para>video/x-matroska</para>
     /// <para>更多参考 EnumVideoType</para>
     /// </summary>
-    [JsonPropertyName("type")]
-    public string? Type { get; set; } = "application/x-mpegURL";
+    public string Type { get; set; } = "application/x-mpegURL";
 
     /// <summary>
     /// 资源地址
     /// </summary>
-    [JsonPropertyName("src")]
-    public string? Src { get; set; }
+    public string Src { get; set; }
 }
