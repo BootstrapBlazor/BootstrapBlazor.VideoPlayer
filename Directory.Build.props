@@ -20,8 +20,4 @@
         <DocumentationFile>$(MSBuildProjectName).xml</DocumentationFile>
     </PropertyGroup>
 
-    <ItemGroup>
-        <None Include="..\..\logo.png" Pack="true" PackagePath="" />
-    </ItemGroup>
-
 </Project>

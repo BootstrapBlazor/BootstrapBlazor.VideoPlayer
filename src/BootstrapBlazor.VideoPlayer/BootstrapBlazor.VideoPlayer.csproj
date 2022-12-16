@@ -15,8 +15,8 @@
         <AssemblyName>BootstrapBlazor.VideoPlayer</AssemblyName>
         <RootNamespace>BootstrapBlazor.VideoPlayer</RootNamespace>
         <AssemblyOriginatorKeyFile>..\keys\Longbow.Utility.snk</AssemblyOriginatorKeyFile>
-         <SignAssembly>True</SignAssembly>
-   </PropertyGroup>
+        <SignAssembly>True</SignAssembly>
+    </PropertyGroup>
 
     <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
         <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.10" />
@@ -26,11 +26,4 @@
         <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0" />
     </ItemGroup>
 
-    <!-- 通过移除正常的引用并替换成固定版本的引用，达到无论如何更新都无法生效的目的。 -->
-    <Target Condition="'$(TargetFramework)' == 'net6.0'" Name="ReferenceStaticLegacyPackage" BeforeTargets="CollectPackageReferences">
-        <ItemGroup>
-            <PackageReference Remove="Microsoft.AspNetCore.Components.Web" />
-            <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0" />
-        </ItemGroup>
-    </Target>
 </Project>
