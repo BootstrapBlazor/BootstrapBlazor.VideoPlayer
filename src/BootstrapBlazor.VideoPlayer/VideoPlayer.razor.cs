@@ -229,5 +229,4 @@ public partial class VideoPlayer : IAsyncDisposable
         if (Debug) StateHasChanged();
         if (OnError != null) await OnError.Invoke(error);
     }
-
 }
