@@ -32,9 +32,9 @@ export function setPoster(poster) {
 }
 
 export function reloadPlayer(videoSource, type) {
-    //if (!player.paused) {
-    //    player.pause();
-    //}
+    if (!player.paused) {
+        player.pause();
+    }
 
     // 获取资源
     console.log(player.currentSrc());

@@ -3,6 +3,8 @@
 
 示例:
 
+https://www.blazor.zone/videoPlayers
+
 https://blazor.app1.es/videoPlayers
 
 使用方法:
@@ -18,17 +20,17 @@ https://blazor.app1.es/videoPlayers
 
 3.razor页面
 ```
-<VideoPlayer SourcesType="application/x-mpegURL" SourcesUrl="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" />
+<VideoPlayer MineType="application/x-mpegURL" Url="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" />
 
-<VideoPlayer SourcesType="video/mp4" SourcesUrl="//vjs.zencdn.net/v/oceans.mp4" />
+<VideoPlayer MineType="video/mp4" Url="//vjs.zencdn.net/v/oceans.mp4" />
 ```
 
 4.参数说明
 
 |  参数   | 说明  | 默认值  | 
 |  ----  | ----  | ----  | 
-| SourcesUrl  | 资源地址 | null | 
-| SourcesType  | 资源类型,video/mp4, application/x-mpegURL, video/ogg .. 更多参考 EnumVideoType | application/x-mpegURL | 
+| Url  | 资源地址 | null | 
+| MineType  | 资源类型,video/mp4, application/x-mpegURL, video/ogg .. 更多参考 EnumVideoType | application/x-mpegURL | 
 | Width  | 宽度 | 300 | 
 | Height  | 高度 | 200 | 
 | Controls  | 显示控制条 | true | 
@@ -79,5 +81,3 @@ https://blazor.app1.es/videoPlayers
 
 [今日头条](https://www.toutiao.com/c/user/token/MS4wLjABAAAAGMBzlmgJx0rytwH08AEEY8F0wIVXB2soJXXdUP3ohAE/?) | [博客园](https://www.cnblogs.com/densen2014) | [知乎](https://www.zhihu.com/people/alex-chow-54) | [Gitee](https://gitee.com/densen2014) | [GitHub](https://github.com/densen2014)
 
-
-![ChuanglinZhou](https://user-images.githubusercontent.com/8428709/205942253-8ff5f9ca-a033-4707-9c36-b8c9950e50d6.png)
