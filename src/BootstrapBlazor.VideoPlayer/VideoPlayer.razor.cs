@@ -5,9 +5,8 @@
 // **********************************
 
 using Microsoft.AspNetCore.Components;
-using Microsoft.Extensions.Options;
 using Microsoft.JSInterop;
-using System.Runtime.Intrinsics.Arm;
+using System.Diagnostics.CodeAnalysis;
 
 namespace BootstrapBlazor.Components;
 
@@ -16,20 +15,31 @@ namespace BootstrapBlazor.Components;
 /// </summary>
 public partial class VideoPlayer : IAsyncDisposable
 {
-    [Inject] IJSRuntime? JS { get; set; }
-    public IJSObjectReference? module;
-    private DotNetObjectReference<VideoPlayer>? instance { get; set; }
-    protected ElementReference element { get; set; }
-    private bool IsInitialized;
-    private string? info;
+    [Inject]
+    [NotNull]
+    private IJSRuntime? JSRuntime { get; set; }
 
-    private string Id { get; set; } = Guid.NewGuid().ToString();
+    [NotNull]
+    private IJSObjectReference? Module { get; set; }
+
+    private DotNetObjectReference<VideoPlayer>? Instance { get; set; }
+
+    private ElementReference Element { get; set; }
+
+    private bool IsInitialized { get; set; }
+
+    private string? DebugInfo { get; set; }
+
+    [NotNull]
+    private string? Id { get; set; }
 
     /// <summary>
     /// 资源地址
     /// </summary>
     [Parameter]
-    public string? SourcesUrl { get; set; }
+    [NotNull]
+    [EditorRequired]
+    public string? Url { get; set; }
 
     /// <summary>
     /// 资源类型
@@ -40,7 +50,8 @@ public partial class VideoPlayer : IAsyncDisposable
     /// <para>更多参考 EnumVideoType</para>
     /// </summary>
     [Parameter]
-    public string? SourcesType { get; set; } = "application/x-mpegURL";
+    [NotNull]
+    public string? MineType { get; set; } = "application/x-mpegURL";
 
     /// <summary>
     /// 宽度
@@ -79,129 +90,10 @@ public partial class VideoPlayer : IAsyncDisposable
     public string? Poster { get; set; }
 
     /// <summary>
-    /// 播放器选项, 不为空则优先使用播放器选项,否则使用参数构建
-    /// </summary>
-    [Parameter]
-    public VideoPlayerOption? Option { get; set; }
-
-    /// <summary>
     /// 显示调试信息
     /// </summary>
     [Parameter]
     public bool Debug { get; set; }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        try
-        {
-            if (firstRender)
-            {
-                module = await JS!.InvokeAsync<IJSObjectReference>("import", "./_content/BootstrapBlazor.VideoPlayer/app.js");
-                instance = DotNetObjectReference.Create(this);
-                await OnInit();
-            }
-        }
-        catch (Exception e)
-        {
-            if (OnError != null) await OnError.Invoke(e.Message);
-        }
-    }
-
-    /// <summary>
-    /// 初始化,无 SourcesUrl 合法参数不进行初始化, Reload 会检测并重新初始化
-    /// </summary>
-    /// <returns></returns>
-    async Task OnInit()
-    {
-        if (string.IsNullOrEmpty(SourcesUrl))
-        {
-            if (OnError != null) await OnError.Invoke("SourcesUrl is empty.");
-            return;
-        }
-        if (!this.IsInitialized)
-        {
-            Option = Option ?? new VideoPlayerOption()
-            {
-                Width = Width,
-                Height = Height,
-                Controls = Controls,
-                Autoplay = Autoplay,
-                Preload = Preload,
-                Poster = Poster,
-                //EnableSourceset= true,
-                //TechOrder= "['fakeYoutube', 'html5']"
-            };
-            Option.Sources.Add(new VideoSources(SourcesType, SourcesUrl));
-
-            try
-            {
-                await module!.InvokeVoidAsync("loadPlayer", instance, "video_" + Id, Option);
-            }
-            catch (Exception e)
-            {
-                info = e.Message;
-                if (Debug) StateHasChanged();
-                Console.WriteLine(info);
-                if (OnError != null) await OnError.Invoke(info);
-            }
-        }
-    }
-
-    /// <summary>
-    /// 切换播放资源
-    /// </summary>
-    /// <param name="url"></param>
-    /// <param name="type"></param>
-    /// <returns></returns>
-    public virtual async Task Reload(string? url, string? type)
-    {
-        await OnInit();
-        try
-        {
-            await module!.InvokeVoidAsync("reloadPlayer", url, type);
-        }
-        catch (Exception e)
-        {
-            info = e.Message;
-            if (Debug) StateHasChanged();
-            Console.WriteLine(info);
-            if (OnError != null) await OnError.Invoke(info);
-        }
-    }
-
-    /// <summary>
-    /// 设置封面
-    /// </summary>
-    /// <param name="poster"></param>
-    /// <returns></returns>
-    public virtual async Task SetPoster(string? poster)
-    {
-        try
-        {
-            await module!.InvokeVoidAsync("setPoster", poster);
-        }
-        catch (Exception e)
-        {
-            info = e.Message;
-            if (Debug) StateHasChanged();
-            Console.WriteLine(info);
-            if (OnError != null) await OnError.Invoke(info);
-        }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
-    async ValueTask IAsyncDisposable.DisposeAsync()
-    {
-        if (module is not null)
-        {
-            await module.InvokeVoidAsync("destroy", Id);
-            await module.DisposeAsync();
-        }
-    }
-
 
     /// <summary>
     /// 获得/设置 错误回调方法
@@ -210,23 +102,123 @@ public partial class VideoPlayer : IAsyncDisposable
     public Func<string, Task>? OnError { get; set; }
 
     /// <summary>
-    /// JS回调方法
+    /// <inheritdoc/>
     /// </summary>
-    /// <param name="init"></param>
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        Id = $"vp_{GetHashCode()}";
+    }
+
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
+    /// <param name="firstRender"></param>
     /// <returns></returns>
-    [JSInvokable]
-    public void GetInit(bool init) => this.IsInitialized = init;
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            Module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/BootstrapBlazor.VideoPlayer/app.js");
+            Instance = DotNetObjectReference.Create(this);
+            await MakesurePlayerReady();
+        }
+    }
+
+    /// <summary>
+    /// 初始化,无 Url 合法参数不进行初始化, Reload 会检测并重新初始化
+    /// </summary>
+    /// <returns></returns>
+    private async Task MakesurePlayerReady()
+    {
+        if (!IsInitialized)
+        {
+            if (string.IsNullOrEmpty(Url))
+            {
+                await Logger($"Url is empty");
+            }
+            else
+            {
+                var option = new VideoPlayerOption()
+                {
+                    Width = Width,
+                    Height = Height,
+                    Controls = Controls,
+                    Autoplay = Autoplay,
+                    Preload = Preload,
+                    Poster = Poster
+                };
+                option.Sources.Add(new VideoSources(MineType, Url));
+                await Module.InvokeVoidAsync("loadPlayer", Instance, Id, option);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 切换播放资源
+    /// </summary>
+    /// <param name="url"></param>
+    /// <param name="mineType"></param>
+    /// <returns></returns>
+    public virtual async Task Reload(string url, string mineType)
+    {
+        Url = url;
+        MineType = mineType;
+        await MakesurePlayerReady();
+        await Module.InvokeVoidAsync("reloadPlayer", url, mineType);
+    }
+
+    /// <summary>
+    /// 设置封面
+    /// </summary>
+    /// <param name="poster"></param>
+    /// <returns></returns>
+    public virtual async Task SetPoster(string poster)
+    {
+        Poster = poster;
+        await Module.InvokeVoidAsync("setPoster", poster);
+    }
 
     /// <summary>
     /// JS回调方法
     /// </summary>
-    /// <param name="error"></param>
     /// <returns></returns>
     [JSInvokable]
-    public async Task GetError(string error)
+    public void GetInit() => IsInitialized = true;
+
+    /// <summary>
+    /// JS回调方法
+    /// </summary>
+    /// <param name="message"></param>
+    /// <returns></returns>
+    [JSInvokable]
+    public async Task Logger(string message)
     {
-        info = error;
-        if (Debug) StateHasChanged();
-        if (OnError != null) await OnError.Invoke(error);
+        DebugInfo = message;
+        if (Debug)
+        {
+            StateHasChanged();
+        }
+
+        Console.WriteLine(DebugInfo);
+        if (OnError != null)
+        {
+            await OnError.Invoke(DebugInfo);
+        }
+    }
+
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
+    /// <returns></returns>
+    public async ValueTask DisposeAsync()
+    {
+        if (Module is not null)
+        {
+            await Module.InvokeVoidAsync("destroy", Id);
+            await Module.DisposeAsync();
+        }
+        GC.SuppressFinalize(this);
     }
 }

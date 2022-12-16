@@ -16,10 +16,10 @@ export function loadPlayer(instance, id, options) {
                 console.log('Autoplay started!');
             }).catch(function (error) {
                 console.log('Autoplay was prevented.', error);
-                instance.invokeMethodAsync('GetError', 'Autoplay was prevented.' + error);
+                instance.invokeMethodAsync('Logger', 'Autoplay was prevented.' + error);
             });
         }
-        instance.invokeMethodAsync('GetInit', true);
+        instance.invokeMethodAsync('GetInit');
     });
 
     return false;
@@ -39,7 +39,7 @@ export function reloadPlayer(videoSource, type) {
     // 获取资源
     console.log(player.currentSrc());
     // 更新资源
-    player.src({ src: videoSource, type: type });  
+    player.src({ src: videoSource, type: type });
     player.load();
     player.play();
 }

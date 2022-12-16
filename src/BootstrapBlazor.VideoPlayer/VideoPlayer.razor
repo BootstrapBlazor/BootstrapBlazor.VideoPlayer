@@ -2,8 +2,8 @@
 
 <link href="./_content/BootstrapBlazor.VideoPlayer/video-js.min.css" rel="stylesheet">
 
-<div @ref="element">
-    <video id="video_@Id"
+<div @ref="Element">
+    <video id="@Id"
            class="video-js"
            muted
            webkit-playsinline
@@ -22,6 +22,6 @@
     </video>
     @if (Debug)
     {
-        <pre>@info</pre>
+        <pre>@DebugInfo</pre>
     }
 </div>
