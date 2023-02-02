@@ -1,6 +1,6 @@
 ﻿@namespace BootstrapBlazor.Components
 
-<link href="./_content/BootstrapBlazor.VideoPlayer/video-js.min.css" rel="stylesheet">
+<link href="@CssPath" rel="stylesheet">
 
 <div @ref="Element">
     <video id="@Id"
@@ -20,6 +20,7 @@
             </a>
         </p>
     </video>
+
     @if (Debug)
     {
         <pre>@DebugInfo</pre>

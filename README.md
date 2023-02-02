@@ -27,20 +27,25 @@ https://blazor.app1.es/videoPlayers
 
 4.参数说明
 
-|  参数   | 说明  | 默认值  | 
-|  ----  | ----  | ----  | 
-| Url  | 资源地址 | null | 
-| MineType  | 资源类型,video/mp4, application/x-mpegURL, video/ogg .. 更多参考 EnumVideoType | application/x-mpegURL | 
-| Width  | 宽度 | 300 | 
-| Height  | 高度 | 200 | 
-| Controls  | 显示控制条 | true | 
-| Autoplay  | 自动播放 | true | 
-| Poster  | 设置封面资源,相对或者绝对路径 |  | 
-| Option  | 播放器选项, 不为空则优先使用播放器选项,否则使用参数构建 | null | 
-| async Task Reload(string? url, string? type) | 切换播放资源 | |
-| async Task SetPoster(string? poster) | 设置封面 | |
-| Func<string, Task>? OnError | 错误回调 |
+|  类型   |  参数   | 说明  | 默认值  | 
+|  ----  |  ----  | ----  | ----  | 
+| string | Url  | 资源地址 | null | 
+| string | MineType  | 资源类型,video/mp4, application/x-mpegURL, video/ogg .. 更多参考 EnumVideoType | application/x-mpegURL | 
+| int | Width  | 宽度 | 300 | 
+| int | Height  | 高度 | 200 | 
+| bool | Controls  | 显示控制条 | true | 
+| bool | Autoplay  | 自动播放 | true | 
+| string | Poster  | 设置封面资源,相对或者绝对路径 |  | 
+| string | Language  | 界面语言,默认 获取当前文化, 例如 zh-CN / en-US,如果语言包不存在,回退到 zh-CN | 当前文化 | 
+| VideoPlayerOption | Option  | 播放器选项, 不为空则优先使用播放器选项,否则使用参数构建 | null | 
+| async Task |  Reload(string? url, string? type) | 切换播放资源 | |
+| async Task |  SetPoster(string? poster) | 设置封面 | |
+| Func&lt;string, Task&gt;? |  OnError | 错误回调 |
 
+#### 更新历史
+
+v7.0.2 
+- 添加 Language : 界面语言,默认 获取当前文化, 例如 zh-CN / en-US,如果语言包不存在,回退到 zh-CN 
 
 ---
 #### Blazor 组件

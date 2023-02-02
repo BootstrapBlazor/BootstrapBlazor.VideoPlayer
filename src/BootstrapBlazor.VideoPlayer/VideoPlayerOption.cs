@@ -49,4 +49,9 @@ public class VideoPlayerOption
     //public bool EnableSourceset { get; set; }
 
     //public string? TechOrder { get; set; } = "['html5', 'flash']";
+
+    /// <summary>
+    /// 界面语言,默认 zh-CN
+    /// </summary>
+    public string? Language { get; set; } = "zh-CN";
 }

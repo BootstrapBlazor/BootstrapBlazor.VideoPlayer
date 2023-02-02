@@ -7,6 +7,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 
 namespace BootstrapBlazor.Components;
 
@@ -21,6 +22,9 @@ public partial class VideoPlayer : IAsyncDisposable
 
     [NotNull]
     private IJSObjectReference? Module { get; set; }
+
+    [NotNull]
+    private IJSObjectReference? ModuleLang { get; set; }
 
     private DotNetObjectReference<VideoPlayer>? Instance { get; set; }
 
@@ -90,6 +94,13 @@ public partial class VideoPlayer : IAsyncDisposable
     public string? Poster { get; set; }
 
     /// <summary>
+    /// 界面语言,默认 获取当前文化, 例如 zh-CN / en-US
+    /// <para></para>如果语言包不存在,回退到 zh-CN
+    /// </summary>
+    [Parameter]
+    public string? Language { get; set; }
+
+    /// <summary>
     /// 显示调试信息
     /// </summary>
     [Parameter]
@@ -111,6 +122,9 @@ public partial class VideoPlayer : IAsyncDisposable
         Id = $"vp_{GetHashCode()}";
     }
 
+    string? Ver { get; set; } = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString();
+    string? CssPath { get => "./_content/BootstrapBlazor.VideoPlayer/video-js.min.css" + "?v=" + Ver; }
+
     /// <summary>
     /// <inheritdoc/>
     /// </summary>
@@ -120,7 +134,19 @@ public partial class VideoPlayer : IAsyncDisposable
     {
         if (firstRender)
         {
-            Module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/BootstrapBlazor.VideoPlayer/app.js" + "?v=" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
+            Module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/BootstrapBlazor.VideoPlayer/app.js" + "?v=" + Ver);
+            
+            var language = Language ?? CultureInfo.CurrentCulture.Name;
+            try
+            {
+                await JSRuntime.InvokeAsync<IJSObjectReference>("import", $"./_content/BootstrapBlazor.VideoPlayer/lang/{Language}.js" + "?v=" + Ver);
+            }
+            catch{
+                //如果语言包不存在,回退到 zh-CN
+                Language = "zh-CN";
+                await JSRuntime.InvokeAsync<IJSObjectReference>("import", $"./_content/BootstrapBlazor.VideoPlayer/lang/{Language}.js" + "?v=" + Ver);
+            }
+            
             Instance = DotNetObjectReference.Create(this);
             await MakesurePlayerReady();
         }
@@ -147,7 +173,8 @@ public partial class VideoPlayer : IAsyncDisposable
                     Controls = Controls,
                     Autoplay = Autoplay,
                     Preload = Preload,
-                    Poster = Poster
+                    Poster = Poster,
+                    Language = Language,
                 };
                 option.Sources.Add(new VideoSources(MineType, Url));
                 await Module.InvokeVoidAsync("loadPlayer", Instance, Id, option);

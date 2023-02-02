@@ -1,5 +1,4 @@
 ﻿import '/_content/BootstrapBlazor.VideoPlayer/video.min.js';
-import '/_content/BootstrapBlazor.VideoPlayer/videojs-http-streaming.min.js';
 
 var player = null;
 
