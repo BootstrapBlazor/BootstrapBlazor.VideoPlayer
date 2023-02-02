@@ -135,18 +135,27 @@ public partial class VideoPlayer : IAsyncDisposable
         if (firstRender)
         {
             Module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/BootstrapBlazor.VideoPlayer/app.js" + "?v=" + Ver);
-            
-            var language = Language ?? CultureInfo.CurrentCulture.Name;
+
+            Language = Language ?? CultureInfo.CurrentCulture.Name;
             try
             {
                 await JSRuntime.InvokeAsync<IJSObjectReference>("import", $"./_content/BootstrapBlazor.VideoPlayer/lang/{Language}.js" + "?v=" + Ver);
             }
             catch{
-                //如果语言包不存在,回退到 zh-CN
-                Language = "zh-CN";
-                await JSRuntime.InvokeAsync<IJSObjectReference>("import", $"./_content/BootstrapBlazor.VideoPlayer/lang/{Language}.js" + "?v=" + Ver);
+                try
+                {
+                    //如果语言代码与子代码（例如en-us）不匹配，则使用主代码（例如en）的匹配项（如果可用）
+                    Language = Language.Contains("-") ? Language.Split("-")[0] : "zh-CN";
+                    await JSRuntime.InvokeAsync<IJSObjectReference>("import", $"./_content/BootstrapBlazor.VideoPlayer/lang/{Language}.js" + "?v=" + Ver);
+                }
+                catch
+                {
+                    //如果语言包不存在,回退到 zh-CN
+                    Language = "zh-CN";
+                    await JSRuntime.InvokeAsync<IJSObjectReference>("import", $"./_content/BootstrapBlazor.VideoPlayer/lang/{Language}.js" + "?v=" + Ver);
+                }
             }
-            
+
             Instance = DotNetObjectReference.Create(this);
             await MakesurePlayerReady();
         }

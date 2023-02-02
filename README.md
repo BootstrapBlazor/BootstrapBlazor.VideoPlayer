@@ -47,6 +47,9 @@ https://blazor.app1.es/videoPlayers
 v7.0.2 
 - 添加 Language : 界面语言,默认 获取当前文化, 例如 zh-CN / en-US,如果语言包不存在,回退到 zh-CN 
 
+v7.0.3 
+- 如果语言代码与子代码（例如en-us）不匹配，则使用主代码（例如en）的匹配项（如果可用）, 如果语言包不存在,回退到 zh-CN 
+
 ---
 #### Blazor 组件
 
