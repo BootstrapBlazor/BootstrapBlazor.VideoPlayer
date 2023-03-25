@@ -23,6 +23,9 @@ https://blazor.app1.es/videoPlayers
 <VideoPlayer MineType="application/x-mpegURL" Url="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" />
 
 <VideoPlayer MineType="video/mp4" Url="//vjs.zencdn.net/v/oceans.mp4" />
+
+<VideoPlayer MineType="video/mp4" Url="//vjs.zencdn.net/v/oceans.mp4" Width="400" Height="300" Autoplay="false" Poster="//vjs.zencdn.net/v/oceans.png" />
+
 ```
 
 4.参数说明

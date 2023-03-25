@@ -8,15 +8,20 @@ export function loadPlayer(instance, id, options) {
 
     player.ready(function () {
         console.log('player.ready');
-        var promise = player.play();
 
-        if (promise !== undefined) {
-            promise.then(function () {
-                console.log('Autoplay started!');
-            }).catch(function (error) {
-                console.log('Autoplay was prevented.', error);
-                instance.invokeMethodAsync('Logger', 'Autoplay was prevented.' + error);
-            });
+        if (options.autoplay) {
+            var promise = player.play();
+
+            if (promise !== undefined) {
+                promise.then(function () {
+                    console.log('Autoplay started!');
+                }).catch(function (error) {
+                    console.log('Autoplay was prevented.', error);
+                    instance.invokeMethodAsync('Logger', 'Autoplay was prevented.' + error);
+                });
+            }
+        } else {
+            player.poster(options.poster);
         }
         instance.invokeMethodAsync('GetInit');
     });
