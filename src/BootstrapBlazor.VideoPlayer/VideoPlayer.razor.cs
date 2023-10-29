@@ -122,8 +122,8 @@ public partial class VideoPlayer : IAsyncDisposable
         Id = $"vp_{GetHashCode()}";
     }
 
-    string? Ver { get; set; } = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString();
-    string? CssPath { get => "./_content/BootstrapBlazor.VideoPlayer/video-js.min.css" + "?v=" + Ver; }
+    private string? Ver { get; set; } = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString();
+    private string? CssPath { get => "./_content/BootstrapBlazor.VideoPlayer/video-js.min.css" + "?v=" + Ver; }
 
     /// <summary>
     /// <inheritdoc/>
@@ -141,7 +141,8 @@ public partial class VideoPlayer : IAsyncDisposable
             {
                 await JSRuntime.InvokeAsync<IJSObjectReference>("import", $"./_content/BootstrapBlazor.VideoPlayer/lang/{Language}.js" + "?v=" + Ver);
             }
-            catch{
+            catch
+            {
                 try
                 {
                     //如果语言代码与子代码（例如en-us）不匹配，则使用主代码（例如en）的匹配项（如果可用）
