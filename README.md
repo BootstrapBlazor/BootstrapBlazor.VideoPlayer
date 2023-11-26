@@ -46,6 +46,10 @@ https://blazor.app1.es/videoPlayers
 | Func&lt;string, Task&gt;? |  OnError | 错误回调 |
 
 #### 更新历史
+v 8.0.1
+- 修复播放器某些特殊浏览器无法播放的问题, 升级内置播放器版本到 8.6.1
+- 添加 VideoJsPath : 自定义video.js路径,默认为null,使用内置video.js
+- 添加 LanguagePath : 自定义语言包路径,默认为null,使用内置语言包
 
 v7.0.2 
 - 添加 Language : 界面语言,默认 获取当前文化, 例如 zh-CN / en-US,如果语言包不存在,回退到 zh-CN 

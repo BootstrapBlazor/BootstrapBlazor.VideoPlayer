@@ -123,7 +123,21 @@ public partial class VideoPlayer : IAsyncDisposable
     }
 
     private string? Ver { get; set; } = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString();
+
+    /// <summary>
+    /// 自定义CSS
+    /// </summary>
     private string? CssPath { get => "./_content/BootstrapBlazor.VideoPlayer/video-js.min.css" + "?v=" + Ver; }
+
+    /// <summary>
+    /// 自定义video.js路径,默认为null,使用内置video.js
+    /// </summary>
+    private string? VideoJsPath { get; set; }
+
+    /// <summary>
+    /// 自定义语言包,默认为null,使用内置语言包
+    /// </summary>
+    private string? LanguagePath { get; set; }
 
     /// <summary>
     /// <inheritdoc/>
@@ -134,12 +148,16 @@ public partial class VideoPlayer : IAsyncDisposable
     {
         if (firstRender)
         {
+            VideoJsPath= VideoJsPath ?? $"./_content/BootstrapBlazor.VideoPlayer/video.min.js" + "?v=" + Ver;
+
+            await JSRuntime.InvokeAsync<IJSObjectReference>("import", VideoJsPath);
+
             Module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/BootstrapBlazor.VideoPlayer/app.js" + "?v=" + Ver);
 
             Language = Language ?? CultureInfo.CurrentCulture.Name;
             try
             {
-                await JSRuntime.InvokeAsync<IJSObjectReference>("import", $"./_content/BootstrapBlazor.VideoPlayer/lang/{Language}.js" + "?v=" + Ver);
+                await JSRuntime.InvokeAsync<IJSObjectReference>("import", LanguagePath ?? ($"./_content/BootstrapBlazor.VideoPlayer/lang/{Language}.js" + "?v=" + Ver));
             }
             catch
             {
@@ -147,7 +165,7 @@ public partial class VideoPlayer : IAsyncDisposable
                 {
                     //如果语言代码与子代码（例如en-us）不匹配，则使用主代码（例如en）的匹配项（如果可用）
                     Language = Language.Contains("-") ? Language.Split("-")[0] : "zh-CN";
-                    await JSRuntime.InvokeAsync<IJSObjectReference>("import", $"./_content/BootstrapBlazor.VideoPlayer/lang/{Language}.js" + "?v=" + Ver);
+                    await JSRuntime.InvokeAsync<IJSObjectReference>("import",$"./_content/BootstrapBlazor.VideoPlayer/lang/{Language}.js" + "?v=" + Ver);
                 }
                 catch
                 {
