@@ -111,11 +111,13 @@ public partial class VideoPlayer : IAsyncDisposable
     /// </summary>
     [Parameter]
     public Func<string, Task>? OnError { get; set; }
+
     private static string? Ver { get; set; } = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString();
 
     /// <summary>
     /// 自定义CSS
     /// </summary>
+    [Parameter]
     public string? CssPath { get; set; }= "./_content/BootstrapBlazor.VideoPlayer/video-js.min.css" + "?v=" + Ver; 
 
     /// <summary>

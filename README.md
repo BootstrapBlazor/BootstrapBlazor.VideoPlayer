@@ -47,7 +47,7 @@ https://blazor.app1.es/videoPlayers
 
 #### 更新历史
 
-v 8.0.4
+v 8.0.5
 - 优化组件
 
 v 8.0.1
