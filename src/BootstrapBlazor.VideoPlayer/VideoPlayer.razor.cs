@@ -152,7 +152,7 @@ public partial class VideoPlayer : IAsyncDisposable
 
             await JSRuntime.InvokeAsync<IJSObjectReference>("import", VideoJsPath);
 
-            Module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/BootstrapBlazor.VideoPlayer/app.js" + "?v=" + Ver);
+            Module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/BootstrapBlazor.VideoPlayer/VideoPlayer.razor.js" + "?v=" + Ver);
 
             Language = Language ?? CultureInfo.CurrentCulture.Name;
             try
