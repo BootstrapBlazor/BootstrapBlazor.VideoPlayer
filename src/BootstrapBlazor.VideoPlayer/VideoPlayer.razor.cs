@@ -111,6 +111,24 @@ public partial class VideoPlayer : IAsyncDisposable
     /// </summary>
     [Parameter]
     public Func<string, Task>? OnError { get; set; }
+    private static string? Ver { get; set; } = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString();
+
+    /// <summary>
+    /// 自定义CSS
+    /// </summary>
+    public string? CssPath { get; set; }= "./_content/BootstrapBlazor.VideoPlayer/video-js.min.css" + "?v=" + Ver; 
+
+    /// <summary>
+    /// 自定义video.js路径,默认为null,使用内置video.js
+    /// </summary>
+    [Parameter]
+    public string? VideoJsPath { get; set; }
+
+    /// <summary>
+    /// 自定义语言包,默认为null,使用内置语言包
+    /// </summary>
+    [Parameter]
+    public string? LanguagePath { get; set; }
 
     /// <summary>
     /// <inheritdoc/>
@@ -122,23 +140,6 @@ public partial class VideoPlayer : IAsyncDisposable
         Id = $"vp_{GetHashCode()}";
     }
 
-    private string? Ver { get; set; } = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString();
-
-    /// <summary>
-    /// 自定义CSS
-    /// </summary>
-    private string? CssPath { get => "./_content/BootstrapBlazor.VideoPlayer/video-js.min.css" + "?v=" + Ver; }
-
-    /// <summary>
-    /// 自定义video.js路径,默认为null,使用内置video.js
-    /// </summary>
-    private string? VideoJsPath { get; set; }
-
-    /// <summary>
-    /// 自定义语言包,默认为null,使用内置语言包
-    /// </summary>
-    private string? LanguagePath { get; set; }
-
     /// <summary>
     /// <inheritdoc/>
     /// </summary>
@@ -148,7 +149,8 @@ public partial class VideoPlayer : IAsyncDisposable
     {
         if (firstRender)
         {
-            VideoJsPath= VideoJsPath ?? $"./_content/BootstrapBlazor.VideoPlayer/video.min.js" + "?v=" + Ver;
+            CssPath= CssPath ?? "./_content/BootstrapBlazor.VideoPlayer/video-js.min.css" + "?v=" + Ver;
+            VideoJsPath = VideoJsPath ?? $"./_content/BootstrapBlazor.VideoPlayer/video.min.js" + "?v=" + Ver;
 
             await JSRuntime.InvokeAsync<IJSObjectReference>("import", VideoJsPath);
 
