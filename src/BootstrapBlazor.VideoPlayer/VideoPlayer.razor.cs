@@ -23,11 +23,11 @@ public partial class VideoPlayer : IAsyncDisposable
     [NotNull]
     private IJSObjectReference? Module { get; set; }
 
-    [NotNull]
-    private IJSObjectReference? ModuleLang { get; set; }
-
     private DotNetObjectReference<VideoPlayer>? Instance { get; set; }
 
+    /// <summary>
+    /// UI界面元素的引用对象
+    /// </summary>
     private ElementReference Element { get; set; }
 
     private bool IsInitialized { get; set; }
