@@ -4,6 +4,8 @@
 // e-mail:zhouchuanglin@gmail.com 
 // **********************************
 
+using System.Text.Json.Serialization;
+
 namespace BootstrapBlazor.Components;
 
 /// <summary>
@@ -29,7 +31,8 @@ public class VideoPlayerOption
     /// <summary>
     /// 自动播放,默认 true
     /// </summary>
-    public bool Autoplay { get; set; } = true;
+    [JsonPropertyName("autoplay")]
+    public bool AutoPlay { get; set; } = true;
 
     /// <summary>
     /// 预载,默认 auto
@@ -39,19 +42,15 @@ public class VideoPlayerOption
     /// <summary>
     /// 播放资源
     /// </summary>
-    public List<VideoSources> Sources { get; set; } = new List<VideoSources>();
+    public List<VideoSources> Sources { get; set; } = [];
 
     /// <summary>
     /// 设置封面资源,相对或者绝对路径
     /// </summary>
     public string? Poster { get; set; }
 
-    //public bool EnableSourceset { get; set; }
-
-    //public string? TechOrder { get; set; } = "['html5', 'flash']";
-
     /// <summary>
-    /// 界面语言,默认 zh-CN
+    /// 界面语言, 默认 zh-CN
     /// </summary>
     public string? Language { get; set; } = "zh-CN";
 }

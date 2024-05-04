@@ -1,56 +1,51 @@
-﻿//import '/_content/BootstrapBlazor.VideoPlayer/video.min.js';
+﻿import './video.min.js';
+import { addScript } from '../BootstrapBlazor/modules/utility.js';
+import Data from '../BootstrapBlazor/modules/data.js';
 
-var player = null;
-
-export function loadPlayer(instance, id, options) {
-    console.log('player id', id);
-    player = videojs(id, options);
-
-    player.ready(function () {
-        console.log('player.ready');
-
-        if (options.autoplay) {
-            var promise = player.play();
-
-            if (promise !== undefined) {
-                promise.then(function () {
-                    console.log('Autoplay started!');
-                }).catch(function (error) {
-                    console.log('Autoplay was prevented.', error);
-                    instance.invokeMethodAsync('Logger', 'Autoplay was prevented.' + error);
-                });
-            }
-        } else {
-            player.poster(options.poster);
-        }
-        instance.invokeMethodAsync('GetInit');
-    });
-
-    return false;
-}
-
-export function setPoster(poster) {
-    //  获取封面和设置封面
-    console.log(player.poster());
-    player.poster(poster);
-}
-
-export function reloadPlayer(videoSource, type) {
-    if (!player.paused) {
-        player.pause();
+export async function init(id, options) {
+    const { language } = options;
+    if (language) {
+        await addScript(`./_content/BootstrapBlazor.VideoPlayer/lang/${language}.js`);
     }
 
-    // 获取资源
-    console.log(player.currentSrc());
-    // 更新资源
-    player.src({ src: videoSource, type: type });
-    player.load();
-    player.play();
+    const player = videojs(id, options);
+    player.ready(async () => {
+        if (options.autoplay) {
+            await player.play();
+        }
+        else if (options.poster) {
+            player.poster(options.poster);
+        }
+    });
+    Data.set(id, player);
 }
 
-export function destroy(id) {
-    if (undefined !== player && null !== player) {
+export function setPoster(id, poster) {
+    const player = Data.get(id);
+    if (player && poster) {
+        player.poster(poster);
+    }
+}
+
+export function reloadPlayer(id, videoSource, type) {
+    const player = Data.get(id);
+    if (player) {
+        if (!player.paused) {
+            player.pause();
+        }
+
+        // 更新资源
+        player.src({ src: videoSource, type: type });
+        player.load();
+        player.play();
+    }
+}
+
+export function dispose(id) {
+    const player = Data.get(id);
+    Data.remove(id);
+
+    if (player) {
         player = null;
-        console.log('destroy');
     }
 }
